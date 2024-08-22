@@ -8,7 +8,7 @@ module.exports = {
 		.addNumberOption(option => 
 			option
 				.setName("goal")
-				.setDescription("sets daily calorie goal")
+				.setDescription("daily calorie goal")
 				.setRequired(true)),
 	async execute(interaction) {
 		const goal = interaction.options.getNumber("goal");
