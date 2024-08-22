@@ -1,6 +1,13 @@
 const { SlashCommandBuilder } = require('discord.js');
-const Timers = require("../../models/timers");
 const schedule = require('node-schedule');
+
+const api_url = 'https://zenquotes.io/api/random/';
+async function getapi(url)
+{
+  const response = await fetch(url);
+  var data = await response.json();
+  return data;
+}
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -14,32 +21,13 @@ module.exports = {
 	async execute(interaction) {
 		const user = interaction.user.id;
         const min = interaction.options.getNumber("min");
-        // let timer = await Timers.findOne({where: {username: user}});
         let cur = schedule.scheduledJobs[user];
         if(cur) cur.cancel();
-        cur = schedule.scheduleJob(user, `*/${min} * * * *`, function() {
+        cur = schedule.scheduleJob(user, `*/${min} * * * *`, async function() {
             interaction.followUp(`if youre studying, take a break~ if not, go study ( ｡ •̀ ᴖ •́ ｡)`);
+            const data = await getapi(api_url);
+            interaction.followUp(`remember, ${data[0].a} said "${data[0].q}"~ (from Zen Quotes API)`);
         });
-        // if(timer){
-        //     clearInterval(timer.intervalId);
-        //     let newId = setInterval(() =>{
-        //         interaction.user.send(`test`);
-        //     }, min * 60 * 1000);
-        //     await Timers.update({intervalId: newId}, {where: {username: user}});
-        //     console.log(newId);
-        // }
-        // else{
-        //     let newId = setInterval(() =>{
-        //         interaction.user.send(`test`);
-        //     }, min * 60 * 1000);
-        //     timer = await Timers.create({
-        //         intervalId: newId,
-        //         username: user
-        //     });
-        //     console.log(newId);
-        // }
-        // timer = await Timers.findOne({where: {username: user}});
-        // // console.log(timer.intervalId);
         return interaction.reply(`successfully set reminders for every ${min} minutes~`);
 	}
 };

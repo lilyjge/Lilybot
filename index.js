@@ -3,7 +3,6 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const Trackers = require("./models/trackers");
-const Timers = require("./models/timers");
 const schedule = require('node-schedule');
 
 const rule = new schedule.RecurrenceRule();
@@ -84,7 +83,6 @@ client.on(Events.InteractionCreate, async interaction => {
 
 client.once(Events.ClientReady, readyClient => {
 	Trackers.sync();
-	Timers.sync();
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
 
