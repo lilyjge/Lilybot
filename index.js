@@ -6,15 +6,16 @@ const Trackers = require("./models/trackers");
 const schedule = require('node-schedule');
 
 const rule = new schedule.RecurrenceRule();
-rule.hour = 22;
-rule.minute = 8;
-rule.tz = 'Canada/Eastern';
+rule.hour = 23;
+rule.minute = 59;
+rule.tz = 'Canada/Pacific';
 
 const job = schedule.scheduleJob(rule, async function(){
 	const userList = await Trackers.findAll({attributes: ['username']});
 	const names = userList.map(t => t.username);
 	for(let i = 0; i < names.length; i++){
 		const tracker = await Trackers.findOne({where: {username: names[i]}});
+		if(!tracker.notification) continue;
 		let content = `your calories for today is ${tracker.current}~`;
 		if(tracker.goal){
 			if(tracker.current < tracker.goal){
