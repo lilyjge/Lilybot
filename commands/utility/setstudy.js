@@ -24,9 +24,8 @@ module.exports = {
         let cur = schedule.scheduledJobs[user];
         if(cur) cur.cancel();
         cur = schedule.scheduleJob(user, `*/${min} * * * *`, async function() {
-            interaction.followUp(`if youre studying, take a break~ if not, go study ( ｡ •̀ ᴖ •́ ｡)`);
-            const data = await getapi(api_url);
-            interaction.followUp(`remember, ${data[0].a} said "${data[0].q}"~ (from Zen Quotes API)`);
+          const data = await getapi(api_url);  
+          interaction.followUp(`if youre studying, take a break~ if not, go study ( ｡ •̀ ᴖ •́ ｡) \nremember, ${data[0].a} said "${data[0].q}"~ (from Zen Quotes API)`);
         });
         return interaction.reply(`successfully set reminders for every ${min} minutes~`);
 	}

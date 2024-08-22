@@ -8,10 +8,10 @@ const Trackers = sequelize.define('trackers', {
 		defaultValue: 0,
 	},
 	username: Sequelize.STRING, //ACTUALLY USER ID
-	// notification:{
-	// 	type: Sequelize.BOOLEAN,
-	// 	defaultValue: true
-	// }
+	notification:{
+		type: Sequelize.BOOLEAN,
+		defaultValue: true
+	}
 });
 
 module.exports = Trackers;

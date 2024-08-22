@@ -10,6 +10,7 @@ module.exports = {
         const tracker = await Trackers.findOne({where: {username: user}});
         if(tracker && tracker.goal){
             await Trackers.update({goal: null}, {where: {username: user}});
+            // await Trackers.destroy({where: {username: user}});
             return interaction.reply(`your goal has been deleted <3`);
         }
         return interaction.reply("you don't have a goal to delete(?)");
