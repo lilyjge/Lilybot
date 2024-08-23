@@ -25,6 +25,7 @@ const job = schedule.scheduleJob(rule, async function(){
 	const names = userList.map(t => t.username);
 	for(let i = 0; i < names.length; i++){
 		const tracker = await Trackers.findOne({where: {username: names[i]}});
+		await Trackers.update({current: 0}, {where: {username: names[i]}});
 		if(!tracker.notification) continue;
 		let content = `your calories for today is ${tracker.current}~`;
 		if(tracker.goal){
@@ -39,7 +40,6 @@ const job = schedule.scheduleJob(rule, async function(){
 			}
 		}
 		content += " :D";
-		await Trackers.update({current: 0}, {where: {username: names[i]}});
 		client.users.send(names[i], content);
 	}
 });
