@@ -40,12 +40,12 @@ const rest = new REST().setToken(process.env.token);
 		);
 
 		console.log(`Successfully reloaded ${data.length} application (/) commands.`);
-	// 	rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: [] })
+	// 	rest.put(Routes.applicationGuildCommands(process.env.clientId, process.env.guildId), { body: [] })
 	// 	.then(() => console.log('Successfully deleted all guild commands.'))
 	// 	.catch(console.error);
 	
 	// // for global commands
-	// rest.put(Routes.applicationCommands(clientId), { body: [] })
+	// rest.put(Routes.applicationCommands(process.env.clientId), { body: [] })
 	// 	.then(() => console.log('Successfully deleted all application commands.'))
 	// 	.catch(console.error);
 	} catch (error) {

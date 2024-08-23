@@ -13,7 +13,7 @@ module.exports = {
             return interaction.reply(`bye bye~ good job studying today ദ്ദി(˵ •̀ ᴗ - ˵ ) ✧`);
         }
         else{
-            return interaction.reply(`you don't have a timer to end (?)`);
+            return interaction.reply(`you don't have a study reminder to end (?)`);
         }
 	}
 };
