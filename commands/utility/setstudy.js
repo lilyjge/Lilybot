@@ -16,7 +16,7 @@ module.exports = {
     .addIntegerOption(option => 
       option
         .setName("min")
-        .setDescription("minutes between reminders")
+        .setDescription("minutes between reminders [1, 59]")
         .setRequired(true))
     .addIntegerOption(option => 
       option
@@ -25,6 +25,9 @@ module.exports = {
 	async execute(interaction) {
 		const user = interaction.user.id;
     const min = interaction.options.getInteger("min");
+    if(min <= 0 || min > 59){
+      return interaction.reply("minutes between reminders must be between 1 and 59~");
+    }
     const dur = interaction.options.getInteger("dur");
     const endTime = new Date(Date.now() + 1000 * 60 * dur);
     let cur = schedule.scheduledJobs[user];
