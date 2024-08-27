@@ -1,5 +1,6 @@
 const { SlashCommandBuilder } = require('discord.js');
 const schedule = require('node-schedule');
+const client = require("../../client");
 
 const api_url = 'https://zenquotes.io/api/random/';
 async function getapi(url)
@@ -7,6 +8,27 @@ async function getapi(url)
   const response = await fetch(url);
   var data = await response.json();
   return data;
+}
+
+async function settimer(min, dur, user) {
+  const endTime = new Date(Date.now() + 1000 * 60 * dur);
+  let cur = schedule.scheduledJobs[user];
+  if(cur) cur.cancel();
+  let res = `successfully set reminders for every ${min} minutes~`;
+  if(dur){
+    cur = schedule.scheduleJob(user, {end: endTime, rule: `*/${min} * * * *`}, async function() {
+      const data = await getapi(api_url);
+      client.users.send(user, `<@${user}> if youre studying, take a break~ if not, go study ( ｡ •̀ ᴖ •́ ｡) \nremember, ${data[0].a} said "${data[0].q}"~ (from [Zen Quotes API](https://zenquotes.io/))`);
+    });
+    res += ` reminders will last for ${dur} minutes <3`;
+  }
+  else{
+    cur = schedule.scheduleJob(user, `*/${min} * * * *`, async function() {
+      const data = await getapi(api_url);
+      client.users.send(user, `<@${user}> if youre studying, take a break~ if not, go study ( ｡ •̀ ᴖ •́ ｡) \nremember, ${data[0].a} said "${data[0].q}"~ (from [Zen Quotes API](https://zenquotes.io/))`);
+    });
+  }
+  return res;
 }
 
 module.exports = {
@@ -29,23 +51,7 @@ module.exports = {
       return interaction.reply("minutes between reminders must be between 1 and 59~");
     }
     const dur = interaction.options.getInteger("dur");
-    const endTime = new Date(Date.now() + 1000 * 60 * dur);
-    let cur = schedule.scheduledJobs[user];
-    if(cur) cur.cancel();
-    let res = `successfully set reminders for every ${min} minutes~`;
-    if(dur){
-      cur = schedule.scheduleJob(user, {end: endTime, rule: `*/${min} * * * *`}, async function() {
-        const data = await getapi(api_url);  
-        interaction.followUp(`<@${user}> if youre studying, take a break~ if not, go study ( ｡ •̀ ᴖ •́ ｡) \nremember, ${data[0].a} said "${data[0].q}"~ (from [Zen Quotes API](https://zenquotes.io/))`);
-      });
-      res += ` reminders will last for ${dur} minutes <3`;
-    }
-    else{
-      cur = schedule.scheduleJob(user, `*/${min} * * * *`, async function() {
-        const data = await getapi(api_url);  
-        interaction.followUp(`<@${user}> if youre studying, take a break~ if not, go study ( ｡ •̀ ᴖ •́ ｡) \nremember, ${data[0].a} said "${data[0].q}"~ (from [Zen Quotes API](https://zenquotes.io/))`);
-      });
-    }
+    const res = await settimer(min, dur, user);
     return interaction.reply(res);
 	}
 };

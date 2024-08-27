@@ -1,11 +1,12 @@
 require('dotenv').config();
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const Trackers = require("./models/trackers");
 const schedule = require('node-schedule');
 const express = require("express");
 const app = express();
+const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
+const client = require("./client");
 
 app.get("/", (req, res) =>{
 	res.send("hello world");
@@ -42,13 +43,6 @@ const job = schedule.scheduleJob(rule, async function(){
 		content += " :D";
 		client.users.send(names[i], content);
 	}
-});
-
-const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-  ]
 });
 
 client.commands = new Collection();
@@ -96,5 +90,3 @@ client.once(Events.ClientReady, readyClient => {
 	Trackers.sync();
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
 });
-
-client.login(process.env.token);

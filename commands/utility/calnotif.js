@@ -15,7 +15,7 @@ module.exports = {
 		try{
 			const user = interaction.user.id;
         	const tracker = await Trackers.findOne({where: {username: user}});
-			if(tracker && tracker.goal){
+			if(tracker){
 				await Trackers.update({notification: notif}, {where: {username: user}});
 				return interaction.reply(`successfully changed your notification setting to ${notif} :D`);
 			}
