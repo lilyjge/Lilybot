@@ -3,18 +3,8 @@ const fs = require('node:fs');
 const path = require('node:path');
 const Trackers = require("./models/trackers");
 const schedule = require('node-schedule');
-const express = require("express");
-const app = express();
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const client = require("./client");
-
-app.get("/", (req, res) =>{
-	res.send("hello world");
-});
-
-app.listen(3000, () =>{
-	console.log("listening");
-});
 
 const rule = new schedule.RecurrenceRule();
 rule.hour = 23;
